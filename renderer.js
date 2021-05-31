@@ -19,7 +19,7 @@ const init = async () => {
 		const selectedIndex = ports.findIndex((port) =>
 			port.pnpId.startsWith('USB')
 		);
-		if (selectedIndex) {
+		if (selectedIndex !== -1) {
 			initializePort(ports[selectedIndex].path);
 			options[selectedIndex].selected = 'selected';
 		}
