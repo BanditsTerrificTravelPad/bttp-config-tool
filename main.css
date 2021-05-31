@@ -1,3 +1,13 @@
 body {
   background-color: #2e3440;
+  color: #eceff4;
+}
+
+#container {
+  display: flex;
+}
+
+.step {
+  display: inline-flex;
+  flex-direction: column;
 }
