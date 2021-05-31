@@ -1,0 +1,30 @@
+{
+  "name": "bttp-config-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "lint": "eslint *.js",
+    "lint-fix": "eslint *.js --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BanditsTerrificTravelPad/bttp-config-tool.git"
+  },
+  "author": "Andrew Lehman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BanditsTerrificTravelPad/bttp-config-tool/issues"
+  },
+  "homepage": "https://github.com/BanditsTerrificTravelPad/bttp-config-tool#readme",
+  "dependencies": {
+    "electron": "^13.0.1",
+    "prettier": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4"
+  }
+}
