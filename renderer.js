@@ -7,6 +7,7 @@ let stepDivs = [];
 let canvases = [];
 let textValues = [];
 let textThresholds = [];
+let interval;
 
 const init = async () => {
 	await serialport.list().then((ports) => {
@@ -22,7 +23,7 @@ const init = async () => {
 			initializePort(ports[selectedIndex].path);
 			options[selectedIndex].selected = 'selected';
 		}
-		const select = document.getElementById('ports-dropdown');
+		const select = document.querySelector('#ports-dropdown');
 		options.forEach((option) => select.add(option));
 		select.addEventListener('change', (event) => {
 			nSteps = -1;
@@ -32,12 +33,14 @@ const init = async () => {
 };
 
 const initializePort = (portName) => {
+	clearInterval(interval);
 	if (activePort) activePort.close();
+	clear();
 	activePort = new serialport(portName, {
 		baudRate: baudRate,
 	});
 	activePort.on('data', (data) => parseData(data));
-	setInterval(queryPort, 10);
+	interval = setInterval(queryPort, 10);
 };
 
 const queryPort = () => {
@@ -48,14 +51,14 @@ const parseData = (data) => {
 	const values = data.toString().trim().split(' ');
 	const lastIdx = values.findIndex((v) => v.endsWith('\n'));
 	const stepReadings = values.slice(0, lastIdx + 1).map((n) => parseInt(n));
-	const thresholds = values.slice(lastIdx + 1).map((n) => parseInt(n));
+	const thresholds = values
+		.slice(lastIdx + 1, lastIdx + 1 + stepReadings.length)
+		.map((n) => parseInt(n));
 
 	if (nSteps === -1) {
+		clear();
 		nSteps = thresholds.length;
 		const container = document.querySelector('#container');
-		while (container.firstChild) {
-			container.removeChild(container.firstChild);
-		}
 		stepDivs = thresholds.map(() => document.createElement('div'));
 		canvases = thresholds.map(() => document.createElement('canvas'));
 		textThresholds = thresholds.map(() => document.createElement('span'));
@@ -103,6 +106,55 @@ const drawCanvas = (canvas, value, threshold) => {
 		canvas.width,
 		3
 	);
+};
+
+const editThresholds = () => {
+	const editButton = document.querySelector('#change-thresholds');
+	editButton.innerText = 'Save';
+	let tbValues = textThresholds.map((tt) => tt.innerHTML);
+	const cancelButton = document.createElement('button');
+	cancelButton.innerText = 'Cancel';
+	cancelButton.id = 'cancel-edit';
+	cancelButton.onclick = cancelEdit;
+	editButton.parentNode.insertBefore(cancelButton, editButton);
+	const textBoxes = textThresholds.map(() => document.createElement('input'));
+	textBoxes.forEach((tb, idx) => {
+		tb.type = 'text';
+		tb.size = '3';
+		tb.value = tbValues[idx];
+		stepDivs[idx].replaceChild(
+			tb,
+			stepDivs[idx].querySelector('.text-threshold')
+		);
+	});
+	editButton.onclick = () =>
+		saveThresholds(textBoxes.map((tb) => parseInt(tb.value)));
+};
+
+const saveThresholds = (values) => {
+	if (values.every((n) => n < maxValue && n > 0)) {
+		const command = values.map((v, idx) => `${idx}${v}`).join('\n');
+		activePort.write(command);
+		cancelEdit();
+	}
+};
+
+const cancelEdit = () => {
+	const saveButton = document.querySelector('#change-thresholds');
+	saveButton.innerText = 'Edit Thresholds';
+	saveButton.onclick = editThresholds;
+	const cancelButton = document.querySelector('#cancel-edit');
+	cancelButton.remove();
+	textThresholds.forEach((tt, idx) => {
+		stepDivs[idx].replaceChild(tt, stepDivs[idx].querySelector('input'));
+	});
+};
+
+const clear = () => {
+	const container = document.querySelector('#container');
+	while (container.firstChild) {
+		container.removeChild(container.firstChild);
+	}
 };
 
 init();
