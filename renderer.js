@@ -73,8 +73,8 @@ const parseData = (data) => {
 			stepDivs[idx].appendChild(tv);
 		});
 		canvases.forEach((canvas, idx) => {
-			canvas.width = 100;
-			canvas.height = 500;
+			canvas.width = 50;
+			canvas.height = 250;
 			stepDivs[idx].appendChild(canvas);
 		});
 		stepDivs.forEach((s) => {

@@ -11,3 +11,7 @@ body {
   display: inline-flex;
   flex-direction: column;
 }
+
+canvas {
+  margin-left: 3px;
+}
