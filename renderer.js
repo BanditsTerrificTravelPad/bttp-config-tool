@@ -1,4 +1,4 @@
-const baudRate = 9600;
+const baudRate = 115200;
 const maxValue = 1024;
 const serialport = require('serialport');
 let activePort;
@@ -10,7 +10,7 @@ let textThresholds = [];
 let interval;
 
 const init = async () => {
-	await serialport.list().then((ports) => {
+	serialport.list().then((ports) => {
 		const options = ports.map((port) => {
 			const option = document.createElement('option');
 			option.appendChild(document.createTextNode(port.path));
@@ -49,8 +49,8 @@ const queryPort = () => {
 
 const parseData = (data) => {
 	const values = data.toString().trim().split(' ');
-	const lastIdx = values.findIndex((v) => v.endsWith('\n'));
-	const stepReadings = values.slice(0, lastIdx + 1).map((n) => parseInt(n));
+	const lastIdx = values.findIndex((v) => v.endsWith('\nt'));
+	const stepReadings = values.slice(1, lastIdx + 1).map((n) => parseInt(n));
 	const thresholds = values
 		.slice(lastIdx + 1, lastIdx + 1 + stepReadings.length)
 		.map((n) => parseInt(n));

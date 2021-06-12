@@ -10,6 +10,11 @@ body {
 .step {
   display: inline-flex;
   flex-direction: column;
+  width: 53px;
+}
+
+.text-threshold {
+  height: 21px;
 }
 
 canvas {
