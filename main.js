@@ -14,12 +14,11 @@ function createWindow() {
 			nodeIntegration: true,
 			preload: path.join(__dirname, 'preload.js'),
 		},
+		icon: './icon.png',
 	});
 
 	win.loadFile('index.html');
 	win.removeMenu();
-
-	win.webContents.openDevTools();
 
 	win.on('closed', function () {
 		win = null;
