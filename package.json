@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "configuration tool for bandit's terrific travel pad",
   "main": "main.js",
+  "productName": "BTTP-Config",
   "scripts": {
     "start": "electron .",
-    "install": "electron-rebuild",
     "lint": "eslint *.js",
-    "package": "electron-packager . bttp-config-tool"
+    "package": "electron-packager ."
   },
   "repository": {
     "type": "git",
@@ -16,9 +16,8 @@
   "author": "Andrew Lehman",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^11.2.0",
+    "electron": "^10.4.7",
     "electron-packager": "^15.2.0",
-    "electron-rebuild": "^2.3.4",
     "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-google": "^0.14.0",
@@ -26,6 +25,6 @@
     "prettier": "^2.3.0"
   },
   "dependencies": {
-    "serialport": "^9.0.6"
+    "serialport": "^9.0.3"
   }
 }
